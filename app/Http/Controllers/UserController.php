@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Validator;
+use App\User;
 
 class UserController extends Controller
 {
     public function register(Request $request){
-        $postData = $request->all();
+        $user = $request->all();
         $objValidator = Validator::make(
-            $postData,
+            $user,
             [
                 'account' => [
                     'request',
@@ -42,8 +43,38 @@ class UserController extends Controller
         if($objValidator->fails()){
             return response()->json($objValidator->errors()->all(), 400);
         }
-        $postData['password']=bcrypt($postData['password']);
-        User::create($postData);
+        $user['password']=bcrypt($user['password']);
+        User::create($user);
         return response()->json('註冊成功', 200);
+    }
+
+    public function login(Request $request){
+        $data = $request->all();
+        $objValidator = Validator::make(
+            $data,
+            [
+                'account' => [
+                    'request',
+                ],
+                'password' => [
+                    'required',
+                ],
+            ],
+            [
+                'account.required' => '請輸入帳號',
+                'password.required' => '請輸入密碼',
+            ]
+        );
+        if($objValidator->fails()){
+            return response()->json($objValidator->errors()->all(), 400);
+        }
+        $user = User::where('account', $request['account'])->first();
+        if($user){
+            if(Hash::check($data['password'], $user->password)){
+                return response()->json($user, 200);
+            }
+            return response()->json(['密碼錯誤'], 400);
+        }
+        return response()->json(['無此用戶'], 400);
     }
 }
