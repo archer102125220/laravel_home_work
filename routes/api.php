@@ -13,10 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', 'UserController@register');
+Route::post('login', 'UserController@login');
+Route::group(['middleware' => 'jwtAuth'], function () {
+    Route::get('getUserData', 'UserController@getUserData');
+    Route::post('comment', 'commentController@comment');
 });
-
-
-Route::post('/register','UserController@register');
-Route::post('/login','UserController@login');

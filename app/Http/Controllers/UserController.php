@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Validator;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function register(Request $request){
+    public function register(Request $request) {
         $user = $request->all();
-        $objValidator = Validator::make(
+        $objValidator =Validator::make(
             $user,
             [
                 'account' => [
-                    'request',
+                    'required',
                     'between:6,20',
                     'regex:/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i',
                     'unique:users'
@@ -48,13 +49,14 @@ class UserController extends Controller
         return response()->json('註冊成功', 200);
     }
 
-    public function login(Request $request){
-        $data = $request->all();
+    public function login(Request $request)
+    {
+        $data=$request->all();
         $objValidator = Validator::make(
             $data,
             [
                 'account' => [
-                    'request',
+                    'required',
                 ],
                 'password' => [
                     'required',
@@ -71,10 +73,18 @@ class UserController extends Controller
         $user = User::where('account', $request['account'])->first();
         if($user){
             if(Hash::check($data['password'], $user->password)){
-                return response()->json($user, 200);
+                $token = JWTAuth::fromUser($user);
+                return response()->json($token, 200);
             }
             return response()->json(['密碼錯誤'], 400);
         }
         return response()->json(['無此用戶'], 400);
+        
+    }
+
+    public function getUserData(Request $request)
+    {
+        $userData = $request->input('user');
+        return response()->json($userData, 200);
     }
 }
