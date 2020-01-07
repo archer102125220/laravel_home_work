@@ -8,7 +8,7 @@ use App\Comment;
 
 class CommentController extends Controller
 {
-    public function comment(Request $request)
+    public function newComment(Request $request)
     {
         $postData = $request->all();
         $objValidator = Validator::make(
@@ -16,12 +16,12 @@ class CommentController extends Controller
             [
                 'content' => [
                     'required',
-                    'between:5,60',
+                    'between:0,60',
                 ],
             ],
             [
                 'content.required' => '請輸入留言內容',
-                'content.between' => '留言內容需介於 5-60 字元',
+                'content.between' => '留言內容需小於 60 字元',
             ]
         );
         if ($objValidator->fails()){
