@@ -81,7 +81,7 @@ class UserController extends Controller
         return response()->json(['無此用戶'], 400);
     }
 
-    public function getUserData(Request $request)
+    public function getThisUserData(Request $request)
     {
         $userData = $request->input('user');
         return response()->json($userData, 200);
@@ -124,4 +124,32 @@ class UserController extends Controller
         }
         return response()->json(['無此用戶'], 400);
     }
+
+    public function deleteUser(Request $request)
+    {
+        $userUpdata = $request->all();
+        $objValidator = Validator::make(
+            $userUpdata,
+            [
+                'account' => [
+                    'required',
+                ],
+            ],
+            [
+                'account.required' => '請輸入帳號',
+            ]
+        );
+        if($objValidator->fails()){
+            return response()->json($objValidator->errors()->all(), 400);
+        }
+        $user = User::where('account', $userUpdata['account'])->first();
+        if ($user) {
+            $user->delete();
+            return response()->json(['刪除成功'], 200);
+        }else{
+            return response()->json(['無此用戶'], 400);
+        }
+        
+    }
+
 }

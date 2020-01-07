@@ -16,7 +16,11 @@ use Illuminate\Http\Request;
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');
 Route::group(['middleware' => 'jwtAuth'], function () {
-    Route::get('getUserData', 'UserController@getUserData');
+    Route::get('user/getThisUserData', 'UserController@getThisUserData');
     Route::match(['put', 'patch'], 'user/edit/{userId}', 'UserController@editUser');
-    Route::post('comment', 'commentController@comment');
+    Route::post('user/new_user', 'UserController@register');
+    Route::delete('user/delete_user', 'UserController@deleteUser');
+    
+    Route::post('comment/new_comment', 'commentController@newComment');
+    Route::match(['put', 'patch'], 'comment/edit/{comment_id}', 'commentController@editComment');
 });
