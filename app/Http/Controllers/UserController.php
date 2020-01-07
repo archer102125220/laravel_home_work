@@ -79,12 +79,49 @@ class UserController extends Controller
             return response()->json(['密碼錯誤'], 400);
         }
         return response()->json(['無此用戶'], 400);
-        
     }
 
     public function getUserData(Request $request)
     {
         $userData = $request->input('user');
         return response()->json($userData, 200);
+    }
+
+    public function editUser($userId, Request $request)
+    {
+        $userUpdata['password'] = $request->input('password');
+        $userUpdata['name'] = $request->input('name');
+        $objValidator = Validator::make(
+            $userUpdata,
+            [
+                'password' => [
+                    'required',
+                    'between:6,20'
+                ],
+                'name' => [
+                    'required',
+                    'max:20'
+                ],
+            ],
+            [
+                'password.required' => '請輸入密碼',
+                'password.between' => '密碼需介於6-20個英文字',
+                'name.required' => '請輸入姓名',
+                'name.max' => '姓名不可超過20個英文字(1個中文字等於2個英文字)'
+            ]
+        );
+        if($objValidator->fails()){
+            return response()->json($objValidator->errors()->all(), 400);
+        }
+        
+        $user = User::where('account', $userId)->first();
+        $userUpdata['password']=bcrypt($user['password']);
+        if($user){
+            $user->password = $userUpdata['password'];
+            $user->name = $userUpdata['name'];
+            $user->save();
+            return response()->json(['修改成功'], 200);
+        }
+        return response()->json(['無此用戶'], 400);
     }
 }

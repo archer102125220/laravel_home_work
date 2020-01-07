@@ -17,5 +17,6 @@ Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');
 Route::group(['middleware' => 'jwtAuth'], function () {
     Route::get('getUserData', 'UserController@getUserData');
+    Route::match(['put', 'patch'], 'user/edit/{userId}', 'UserController@editUser');
     Route::post('comment', 'commentController@comment');
 });
