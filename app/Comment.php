@@ -13,6 +13,6 @@ class Commemt extends Model
     const UPDATED_AT = null;
 
     protected $fillable=[
-        'comment_id', 'title', 'content'
+        'comment_id', 'account', 'content'
     ];
 }
