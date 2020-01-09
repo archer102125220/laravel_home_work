@@ -13,8 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 Route::group([
-        'middleware' => ['api', 'cors'],
-        // 'namespace' => $this->namespace,
+        'middleware' => 'cors',
     ], function ($router) {
     Route::post('register', 'UserController@register');
     Route::post('login', 'UserController@login');
