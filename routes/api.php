@@ -27,6 +27,7 @@ Route::group(['middleware' => 'cors'], function () {
             Route::get('posts/{postsId}', 'PostController@Post');
             Route::post('new_post', 'PostController@newPost');
             Route::match(['put', 'patch'], 'edit/{postsId}', 'PostController@editPost');
+            Route::delete('delete_post', 'PostController@deletePost');
         });
         Route::group([ 'prefix' => 'comment',], function () {
             Route::get('comments', 'PostController@Comments');
@@ -34,6 +35,7 @@ Route::group(['middleware' => 'cors'], function () {
             Route::get('comments/{postsId}', 'PostController@CommentByPostsId');
             Route::post('new_comment', 'commentController@newComment');
             Route::match(['put', 'patch'], 'edit/{commentId}', 'commentController@editComment');
+            Route::delete('delete_comment', 'commentController@deleteComment');
         });
     });
 });

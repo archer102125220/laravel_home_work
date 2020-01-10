@@ -149,7 +149,6 @@ class UserController extends Controller
         }else{
             return response()->json(['無此用戶'], 400);
         }
-        
     }
 
 }

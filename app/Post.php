@@ -9,7 +9,8 @@ class Post extends Model
 {
     use Notifiable;
     protected $table = 'posts';
-    protected $primarykey = 'posts_id';
+    protected $primaryKey = 'posts_id';
+    // public $incrementing = false;
     const UPDATED_AT = null;
 
     protected $fillable=[

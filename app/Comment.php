@@ -9,7 +9,8 @@ class Commemt extends Model
 {
     use Notifiable;
     protected $table = 'comments';
-    protected $primarykey = 'comment_id';
+    protected $primaryKey = 'comment_id';
+    // public $incrementing = false;
     const UPDATED_AT = null;
 
     protected $fillable=[
