@@ -20,13 +20,11 @@ class CommentController extends Controller
                 ],
                 'content' => [
                     'required',
-                    'between:0,60',
                 ],
             ],
             [
                 'posts_id.required' => '缺少文章id',
                 'content.required' => '請輸入留言內容',
-                'content.between' => '留言內容需小於 60 字元',
             ]
         );
         if ($objValidator->fails()){
@@ -49,12 +47,10 @@ class CommentController extends Controller
             [
                 'content' => [
                     'required',
-                    'between:0,60',
                 ],
             ],
             [
                 'content.required' => '請輸入留言內容',
-                'content.between' => '留言內容需小於 60 字元',
             ]
         );
         if ($objValidator->fails()){

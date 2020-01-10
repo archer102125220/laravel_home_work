@@ -17,28 +17,20 @@ class UserController extends Controller
             [
                 'account' => [
                     'required',
-                    'between:6,20',
-                    'regex:/^(([a-z]+[0-9]+)|([0-9]+[a-z]+))[a-z0-9]*$/i',
                     'unique:users'
                 ],
                 'password' => [
                     'required',
-                    'between:6,20'
                 ],
                 'name' => [
                     'required',
-                    'max:20'
                 ],
             ],
             [
                 'account.required' => '請輸入帳號',
-                'account.between' => '帳號需介於6-20英文字',
-                'account.regex' => '帳號須包含英文數字',
                 'account.unique' => '帳號已存在',
                 'password.required' => '請輸入密碼',
-                'password.between' => '密碼需介於6-20個英文字',
                 'name.required' => '請輸入姓名',
-                'name.max' => '姓名不可超過20個英文字(1個中文字等於2個英文字)'
             ]
         );
         if($objValidator->fails()){
@@ -105,19 +97,15 @@ class UserController extends Controller
             $userUpdata,
             [
                 'password' => [
-                    'required',
-                    'between:6,20'
+                    'required'
                 ],
                 'name' => [
-                    'required',
-                    'max:20'
+                    'required'
                 ],
             ],
             [
                 'password.required' => '請輸入密碼',
-                'password.between' => '密碼需介於6-20個英文字',
-                'name.required' => '請輸入姓名',
-                'name.max' => '姓名不可超過20個英文字(1個中文字等於2個英文字)'
+                'name.required' => '請輸入姓名'
             ]
         );
         if($objValidator->fails()){

@@ -16,18 +16,14 @@ class PostController extends Controller
             [
                 'title' => [
                     'required',
-                    'between:0,10',
                 ],
                 'content' => [
                     'required',
-                    'between:0,60',
                 ],
             ],
             [
                 'title.required' => '請輸入標題內容',
-                'title.between' => '標題內容需小於 10 字元',
                 'content.required' => '請輸入留言內容',
-                'content.between' => '留言內容需小於 60 字元',
             ]
         );
         if ($objValidator->fails()){
@@ -50,18 +46,14 @@ class PostController extends Controller
             [
                 'title' => [
                     'required',
-                    'between:0,10',
                 ],
                 'content' => [
                     'required',
-                    'between:0,60',
                 ],
             ],
             [
                 'title.required' => '請輸入標題內容',
-                'title.between' => '標題內容需小於 10 字元',
                 'content.required' => '請輸入留言內容',
-                'content.between' => '留言內容需小於 60 字元',
             ]
         );
         if($objValidator->fails()){
