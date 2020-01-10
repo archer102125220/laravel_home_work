@@ -22,9 +22,18 @@ Route::group(['middleware' => 'cors'], function () {
             Route::post('new_user', 'UserController@register');
             Route::delete('delete_user', 'UserController@deleteUser');
         });
+        Route::group([ 'prefix' => 'post',], function () {
+            Route::get('posts', 'PostController@Posts');
+            Route::get('posts/{postsId}', 'PostController@Post');
+            Route::post('new_post', 'PostController@newPost');
+            Route::match(['put', 'patch'], 'edit/{postsId}', 'PostController@editPost');
+        });
         Route::group([ 'prefix' => 'comment',], function () {
+            Route::get('comments', 'PostController@Comments');
+            Route::get('comments/{commentId}', 'PostController@Comment');
+            Route::get('comments/{postsId}', 'PostController@CommentByPostsId');
             Route::post('new_comment', 'commentController@newComment');
-            Route::match(['put', 'patch'], 'edit/{comment_id}', 'commentController@editComment');
+            Route::match(['put', 'patch'], 'edit/{commentId}', 'commentController@editComment');
         });
     });
 });

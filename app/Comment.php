@@ -3,16 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable;
 
 class Commemt extends Model
 {
-    // use Notifiable;
+    use Notifiable;
     protected $table = 'comments';
     protected $primarykey = 'comment_id';
     const UPDATED_AT = null;
 
     protected $fillable=[
-        'comment_id', 'account', 'content'
+        'posts_id', 'account', 'content'
     ];
 }
