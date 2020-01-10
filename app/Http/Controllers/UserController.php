@@ -87,6 +87,16 @@ class UserController extends Controller
         return response()->json($userData, 200);
     }
 
+    
+    public function userAll()
+    {
+        $user = User::all();
+        if($user){
+            return response()->json($user, 200);
+        }
+        return response()->json(['查無貼文'], 400);
+    }
+
     public function editUser($userId, Request $request)
     {
         $userUpdata['password'] = $request->input('password');

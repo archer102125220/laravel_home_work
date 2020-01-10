@@ -18,6 +18,7 @@ Route::group(['middleware' => 'cors'], function () {
     Route::group(['middleware' => 'jwtAuth'], function () {
         Route::group([ 'prefix' => 'user',], function () {
             Route::get('getThisUserData', 'UserController@getThisUserData');
+            Route::get('user_all', 'UserController@userAll');
             Route::match(['put', 'patch'], 'edit/{userId}', 'UserController@editUser');
             Route::post('new_user', 'UserController@register');
             Route::delete('delete_user', 'UserController@deleteUser');
