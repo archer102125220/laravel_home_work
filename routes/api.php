@@ -30,9 +30,9 @@ Route::group(['middleware' => 'cors'], function () {
             Route::delete('delete_post', 'PostController@deletePost');
         });
         Route::group([ 'prefix' => 'comment',], function () {
-            Route::get('comments', 'PostController@Comments');
-            Route::get('comments/{commentId}', 'PostController@Comment');
-            Route::get('comments/{postsId}', 'PostController@CommentByPostsId');
+            Route::get('comments', 'CommentController@CommentAll');
+            Route::get('comments/{commentId}', 'CommentController@Comment');
+            Route::get('comments/postsId/{postsId}', 'CommentController@CommentByPostsId');
             Route::post('new_comment', 'commentController@newComment');
             Route::match(['put', 'patch'], 'edit/{commentId}', 'commentController@editComment');
             Route::delete('delete_comment', 'commentController@deleteComment');

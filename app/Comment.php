@@ -3,11 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 
-class Commemt extends Model
+class Comment extends Model
 {
-    use Notifiable;
     protected $table = 'comments';
     protected $primaryKey = 'comment_id';
     // public $incrementing = false;

@@ -8,6 +8,7 @@ use App\Comment;
 
 class CommentController extends Controller
 {
+    
     public function newComment(Request $request)
     {
         $commentData = $request->all();
@@ -33,10 +34,10 @@ class CommentController extends Controller
         }
         $commentData['account'] = $commentData['user']->account;
         $comment = Comment::create($commentData);
-        $newComment = Comment::select('comments.*', 'name')
+        $newComment = Comment::select('posts.*','users.name','comments.content as comment')
             ->join('posts', 'posts.posts_id', 'comments.posts_id')
             ->join('users', 'users.account', 'comments.account')
-            ->where('comments.comment_id', $comment->id)->first();
+            ->where('comments.comment_id', $comment->comment_id)->first();
             // ->find($comment->comment_id);
         return response()->json($newComment, 200);
     }
@@ -67,39 +68,62 @@ class CommentController extends Controller
         }
         return response()->json(['無此留言'], 400);
     }
-    public function Comments()
+    public function CommentAll()
     {
-        $comments = Comment::select('comments.*', 'name')
-                    ->join('comments', 'comments.posts_id', 'posts.posts_id')
-                    ->join('users', 'users.account', 'posts.account');
-                //Post::all();
+        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+                    ->join('posts', 'posts.posts_id', 'comments.posts_id')
+                    ->join('users', 'users.account', 'comments.account')->get();
         if($comments){
             return response()->json($comments, 200);
         }
-        return response()->json(['查無貼文'], 400);
+        return response()->json(['查無留言'], 400);
     }
+
     public function Comment($commentId)
     {
-        $comments = Comment::select('comments.*', 'name')
-                    ->join('comments', 'comments.posts_id', 'posts.posts_id')
-                    ->join('users', 'users.account', 'posts.account')
+        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+                    ->join('posts', 'posts.posts_id', 'comments.posts_id')
+                    ->join('users', 'users.account', 'comments.account')
                     ->where('comment_id', $commentId)->first();
-                //Post::where('posts_id', $postsId)->first();
         if($comments){
             return response()->json($comments, 200);
         }
-        return response()->json(['查無貼文'], 400);
+        return response()->json(['查無留言'], 400);
     }
     public function CommentByPostsId($postsId)
     {
-        $comments = Comment::select('comments.*', 'name')
-                    ->join('comments', 'comments.posts_id', 'posts.posts_id')
+        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+                    ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'posts.account')
-                    ->where('posts_id', $postsId)->first();
-                //Post::where('posts_id', $postsId)->first();
+                    ->where('comments.posts_id', $postsId)->get();
         if($comments){
             return response()->json($comments, 200);
         }
-        return response()->json(['查無貼文'], 400);
+        return response()->json(['查無留言'], 400);
+    }
+    public function deleteComment(Request $request)
+    {
+        $commentData = $request->all();
+        $objValidator = Validator::make(
+            $commentData,
+            [
+                'comment_id' => [
+                    'required',
+                ],
+            ],
+            [
+                'comment_id.required' => '請輸入留言編號',
+            ]
+        );
+        if($objValidator->fails()){
+            return response()->json($objValidator->errors()->all(), 400);
+        }
+        $comment = Comment::where('comment_id', $commentData['comment_id'])->first();
+        if ($comment) {
+            $comment->delete();
+            return response()->json(['刪除成功'], 200);
+        }else{
+            return response()->json(['無此留言'], 400);
+        }
     }
 }
