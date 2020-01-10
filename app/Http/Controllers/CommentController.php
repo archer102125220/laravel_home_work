@@ -36,7 +36,37 @@ class CommentController extends Controller
             ->join('posts', 'posts.posts_id', 'comments.posts_id')
             ->join('users', 'users.account', 'comments.account')
             ->where('comments.comment_id', $comment->comment_id)->first();
-            // ->find($comment->comment_id);
+        $hasPost = [];
+        foreach ( $newComment as $key => $value){
+            if( !in_array($value['posts_id'], $hasPost) ) {
+                $newPost[$key]['posts_id'] = $value['posts_id'];
+                $newPost[$key]['account'] = $value['account'];
+                $newPost[$key]['title'] = $value['title'];
+                $newPost[$key]['content'] = $value['content'];
+                $newPost[$key]['created_at'] = $value['created_at'];
+                $newPost[$key]['name'] = $value['name'];
+                $newPost[$key]['comment'] = [];
+            }
+            $comment[$key]['posts_id'] = $value['posts_id'];
+            if($value['comment'] != null){
+                $comment[$key]['comment'] = $value['comment'];
+                $comment[$key]['comment_id'] = $value['comment_id'];
+                $comment[$key]['posts_id'] = $value['posts_id'];
+            } else {
+                $comment[$key]=[];
+            }
+            if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
+        }
+        foreach ( $newPost as $key => $value){
+            if( isset($comment[$key]['posts_id']) && $value['posts_id'] === $comment[$key]['posts_id']){
+                array_push($newPost[$key]['comment'], $comment[$key]);
+            }
+        }
+        $comments = [];
+        foreach ( $newPost as $key => $value){
+            $value['comment'] = array_reverse($value['comment']);
+            array_push($comments, $value);
+        }
         return response()->json($newComment, 200);
     }
     public function editComment($commentId, Request $request)
@@ -70,6 +100,37 @@ class CommentController extends Controller
                     ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'comments.account')->get();
         if($comments){
+            $hasPost = [];
+            foreach ( $comments as $key => $value){
+                if( !in_array($value['posts_id'], $hasPost) ) {
+                    $newPost[$key]['posts_id'] = $value['posts_id'];
+                    $newPost[$key]['account'] = $value['account'];
+                    $newPost[$key]['title'] = $value['title'];
+                    $newPost[$key]['content'] = $value['content'];
+                    $newPost[$key]['created_at'] = $value['created_at'];
+                    $newPost[$key]['name'] = $value['name'];
+                    $newPost[$key]['comment'] = [];
+                }
+                $comment[$key]['posts_id'] = $value['posts_id'];
+                if($value['comment'] != null){
+                    $comment[$key]['comment'] = $value['comment'];
+                    $comment[$key]['comment_id'] = $value['comment_id'];
+                    $comment[$key]['posts_id'] = $value['posts_id'];
+                } else {
+                    $comment[$key]=[];
+                }
+                if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
+            }
+            foreach ( $newPost as $key => $value){
+                if( isset($comment[$key]['posts_id']) && $value['posts_id'] === $comment[$key]['posts_id']){
+                    array_push($newPost[$key]['comment'], $comment[$key]);
+                }
+            }
+            $comments = [];
+            foreach ( $newPost as $key => $value){
+                $value['comment'] = array_reverse($value['comment']);
+                array_push($comments, $value);
+             }
             return response()->json($comments, 200);
         }
         return response()->json(['查無留言'], 400);
@@ -80,8 +141,39 @@ class CommentController extends Controller
         $comments = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'comments.account')
-                    ->where('comment_id', $commentId)->first();
+                    ->where('comment_id', $commentId)->get();
         if($comments){
+            $hasPost = [];
+            foreach ( $comments as $key => $value){
+                if( !in_array($value['posts_id'], $hasPost) ) {
+                    $newPost[$key]['posts_id'] = $value['posts_id'];
+                    $newPost[$key]['account'] = $value['account'];
+                    $newPost[$key]['title'] = $value['title'];
+                    $newPost[$key]['content'] = $value['content'];
+                    $newPost[$key]['created_at'] = $value['created_at'];
+                    $newPost[$key]['name'] = $value['name'];
+                    $newPost[$key]['comment'] = [];
+                }
+                $comment[$key]['posts_id'] = $value['posts_id'];
+                if($value['comment'] != null){
+                    $comment[$key]['comment'] = $value['comment'];
+                    $comment[$key]['comment_id'] = $value['comment_id'];
+                    $comment[$key]['posts_id'] = $value['posts_id'];
+                } else {
+                    $comment[$key]=[];
+                }
+                if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
+            }
+            foreach ( $newPost as $key => $value){
+                if( isset($comment[$key]['posts_id']) && $value['posts_id'] === $comment[$key]['posts_id']){
+                    array_push($newPost[$key]['comment'], $comment[$key]);
+                }
+            }
+            $comments = [];
+            foreach ( $newPost as $key => $value){
+                $value['comment'] = array_reverse($value['comment']);
+                array_push($comments, $value);
+             }
             return response()->json($comments, 200);
         }
         return response()->json(['查無留言'], 400);
@@ -93,6 +185,37 @@ class CommentController extends Controller
                     ->join('users', 'users.account', 'posts.account')
                     ->where('comments.posts_id', $postsId)->get();
         if($comments){
+            $hasPost = [];
+            foreach ( $comments as $key => $value){
+                if( !in_array($value['posts_id'], $hasPost) ) {
+                    $newPost[$key]['posts_id'] = $value['posts_id'];
+                    $newPost[$key]['account'] = $value['account'];
+                    $newPost[$key]['title'] = $value['title'];
+                    $newPost[$key]['content'] = $value['content'];
+                    $newPost[$key]['created_at'] = $value['created_at'];
+                    $newPost[$key]['name'] = $value['name'];
+                    $newPost[$key]['comment'] = [];
+                }
+                $comment[$key]['posts_id'] = $value['posts_id'];
+                if($value['comment'] != null){
+                    $comment[$key]['comment'] = $value['comment'];
+                    $comment[$key]['comment_id'] = $value['comment_id'];
+                    $comment[$key]['posts_id'] = $value['posts_id'];
+                } else {
+                    $comment[$key]=[];
+                }
+                if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
+            }
+            foreach ( $newPost as $key => $value){
+                if( isset($comment[$key]['posts_id']) && $value['posts_id'] === $comment[$key]['posts_id']){
+                    array_push($newPost[$key]['comment'], $comment[$key]);
+                }
+            }
+            $comments = [];
+            foreach ( $newPost as $key => $value){
+                $value['comment'] = array_reverse($value['comment']);
+                array_push($comments, $value);
+             }
             return response()->json($comments, 200);
         }
         return response()->json(['查無留言'], 400);
