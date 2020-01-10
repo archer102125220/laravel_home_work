@@ -70,7 +70,7 @@ class PostController extends Controller
     }
     public function Posts()
     {
-        $posts = Post::select('posts.*','users.name','comments.content as comment')
+        $posts = Post::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->leftJoin('comments', 'comments.posts_id', 'posts.posts_id')
                     ->join('users', 'users.account', 'posts.account')->get();
         // $posts = Post::all();
@@ -81,7 +81,7 @@ class PostController extends Controller
     }
     public function Post($postsId)
     {
-        $posts = Post::select('posts.*','users.name','comments.content as comment')
+        $posts = Post::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->leftJoin('comments', 'comments.posts_id', 'posts.posts_id')
                     ->join('users', 'users.account', 'posts.account')
                     ->where('posts.posts_id', $postsId)->get();

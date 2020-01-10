@@ -32,7 +32,7 @@ class CommentController extends Controller
         }
         $commentData['account'] = $commentData['user']->account;
         $comment = Comment::create($commentData);
-        $newComment = Comment::select('posts.*','users.name','comments.content as comment')
+        $newComment = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
             ->join('posts', 'posts.posts_id', 'comments.posts_id')
             ->join('users', 'users.account', 'comments.account')
             ->where('comments.comment_id', $comment->comment_id)->first();
@@ -66,7 +66,7 @@ class CommentController extends Controller
     }
     public function CommentAll()
     {
-        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+        $comments = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'comments.account')->get();
         if($comments){
@@ -77,7 +77,7 @@ class CommentController extends Controller
 
     public function Comment($commentId)
     {
-        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+        $comments = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'comments.account')
                     ->where('comment_id', $commentId)->first();
@@ -88,7 +88,7 @@ class CommentController extends Controller
     }
     public function CommentByPostsId($postsId)
     {
-        $comments = Comment::select('posts.*','users.name','comments.content as comment')
+        $comments = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
                     ->join('posts', 'posts.posts_id', 'comments.posts_id')
                     ->join('users', 'users.account', 'posts.account')
                     ->where('comments.posts_id', $postsId)->get();
