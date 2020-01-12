@@ -93,7 +93,7 @@ class PostController extends Controller
                         $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                     }
                 } else {
-                    $comment[$value['posts_id']]=[];
+                    $comment[$value['posts_id']] = [];
                 }
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
@@ -135,12 +135,12 @@ class PostController extends Controller
                         $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                     }
                 } else {
-                    $comment[$value['posts_id']]=[];
+                    $comment[$value['posts_id']] = [];
                 }
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
             foreach ( $newPost as $key => $value){
-                array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+                $newPost[$key]['comment'] = $comment[$value['posts_id']];
             }
             $posts = [];
             foreach ( $newPost as $value){

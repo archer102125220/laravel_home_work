@@ -35,18 +35,18 @@ class CommentController extends Controller
         $newComment = Comment::select('posts.*','users.name','comments.content as comment','comments.comment_id')
             ->join('posts', 'posts.posts_id', 'comments.posts_id')
             ->join('users', 'users.account', 'comments.account')
-            ->where('comments.comment_id', $comment->comment_id)->first();
+            ->where('comments.posts_id', $comment->posts_id)->get();
         $hasPost = [];
         $comment = [];
         foreach ( $newComment as $key => $value){
             if( !in_array($value['posts_id'], $hasPost) ) {
-                $newPost[$key]['posts_id'] = $value['posts_id'];
-                $newPost[$key]['account'] = $value['account'];
-                $newPost[$key]['title'] = $value['title'];
-                $newPost[$key]['content'] = $value['content'];
-                $newPost[$key]['created_at'] = $value['created_at'];
-                $newPost[$key]['name'] = $value['name'];
-                $newPost[$key]['comment'] = [];
+                $newComment[$key]['posts_id'] = $value['posts_id'];
+                $newComment[$key]['account'] = $value['account'];
+                $newComment[$key]['title'] = $value['title'];
+                $newComment[$key]['content'] = $value['content'];
+                $newComment[$key]['created_at'] = $value['created_at'];
+                $newComment[$key]['name'] = $value['name'];
+                $newComment[$key]['comment'] = [];
             }
             if($value['comment'] != null){
                 if( isset($comment[$value['posts_id']]) ){
@@ -55,15 +55,15 @@ class CommentController extends Controller
                     $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                 }
             } else {
-                $comment[$value['posts_id']]=[];
+                $comment[$value['posts_id']] = [];
             }
             if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
         }
-        foreach ( $newPost as $key => $value){
-            array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+        foreach ( $newComment as $key => $value){
+            $newComment[$key]['comment'] = $comment[$value['posts_id']];
         }
         $newComment = [];
-        foreach ( $newPost as $value){
+        foreach ( $newComment as $value){
             $value['comment'] = array_reverse($value['comment']);
             array_push($newComment, $value);
         }
@@ -104,13 +104,13 @@ class CommentController extends Controller
             $comment = [];
             foreach ( $comments as $key => $value){
                 if( !in_array($value['posts_id'], $hasPost) ) {
-                    $newPost[$key]['posts_id'] = $value['posts_id'];
-                    $newPost[$key]['account'] = $value['account'];
-                    $newPost[$key]['title'] = $value['title'];
-                    $newPost[$key]['content'] = $value['content'];
-                    $newPost[$key]['created_at'] = $value['created_at'];
-                    $newPost[$key]['name'] = $value['name'];
-                    $newPost[$key]['comment'] = [];
+                    $comments[$key]['posts_id'] = $value['posts_id'];
+                    $comments[$key]['account'] = $value['account'];
+                    $comments[$key]['title'] = $value['title'];
+                    $comments[$key]['content'] = $value['content'];
+                    $comments[$key]['created_at'] = $value['created_at'];
+                    $comments[$key]['name'] = $value['name'];
+                    $comments[$key]['comment'] = [];
                 }
                 if($value['comment'] != null){
                     if( isset($comment[$value['posts_id']]) ){
@@ -119,15 +119,15 @@ class CommentController extends Controller
                         $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                     }
                 } else {
-                    $comment[$value['posts_id']]=[];
+                    $comment[$value['posts_id']] = [];
                 }
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
-            foreach ( $newPost as $key => $value){
-                array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+            foreach ( $comments as $key => $value){
+                $comments[$key]['comment'] = $comment[$value['posts_id']];
             }
             $comments = [];
-            foreach ( $newPost as $value){
+            foreach ( $comments as $value){
                 $value['comment'] = array_reverse($value['comment']);
                 array_push($comments, $value);
             }
@@ -147,13 +147,13 @@ class CommentController extends Controller
             $comment = [];
             foreach ( $comments as $key => $value){
                 if( !in_array($value['posts_id'], $hasPost) ) {
-                    $newPost[$key]['posts_id'] = $value['posts_id'];
-                    $newPost[$key]['account'] = $value['account'];
-                    $newPost[$key]['title'] = $value['title'];
-                    $newPost[$key]['content'] = $value['content'];
-                    $newPost[$key]['created_at'] = $value['created_at'];
-                    $newPost[$key]['name'] = $value['name'];
-                    $newPost[$key]['comment'] = [];
+                    $comments[$key]['posts_id'] = $value['posts_id'];
+                    $comments[$key]['account'] = $value['account'];
+                    $comments[$key]['title'] = $value['title'];
+                    $comments[$key]['content'] = $value['content'];
+                    $comments[$key]['created_at'] = $value['created_at'];
+                    $comments[$key]['name'] = $value['name'];
+                    $comments[$key]['comment'] = [];
                 }
                 if($value['comment'] != null){
                     if( isset($comment[$value['posts_id']]) ){
@@ -162,15 +162,15 @@ class CommentController extends Controller
                         $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                     }
                 } else {
-                    $comment[$value['posts_id']]=[];
+                    $comment[$value['posts_id']] = [];
                 }
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
-            foreach ( $newPost as $key => $value){
-                array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+            foreach ( $comments as $key => $value){
+                $comments[$key]['comment'] = $comment[$value['posts_id']];
             }
             $comments = [];
-            foreach ( $newPost as $value){
+            foreach ( $comments as $value){
                 $value['comment'] = array_reverse($value['comment']);
                 array_push($comments, $value);
             }
@@ -189,13 +189,13 @@ class CommentController extends Controller
             $comment = [];
             foreach ( $comments as $key => $value){
                 if( !in_array($value['posts_id'], $hasPost) ) {
-                    $newPost[$key]['posts_id'] = $value['posts_id'];
-                    $newPost[$key]['account'] = $value['account'];
-                    $newPost[$key]['title'] = $value['title'];
-                    $newPost[$key]['content'] = $value['content'];
-                    $newPost[$key]['created_at'] = $value['created_at'];
-                    $newPost[$key]['name'] = $value['name'];
-                    $newPost[$key]['comment'] = [];
+                    $comments[$key]['posts_id'] = $value['posts_id'];
+                    $comments[$key]['account'] = $value['account'];
+                    $comments[$key]['title'] = $value['title'];
+                    $comments[$key]['content'] = $value['content'];
+                    $comments[$key]['created_at'] = $value['created_at'];
+                    $comments[$key]['name'] = $value['name'];
+                    $comments[$key]['comment'] = [];
                 }
                 if($value['comment'] != null){
                     if( isset($comment[$value['posts_id']]) ){
@@ -204,15 +204,15 @@ class CommentController extends Controller
                         $comment[$value['posts_id']] = Array(['comment' => $value['comment'], 'comment_id' => $value['comment_id'], 'posts_id' => $value['posts_id']]);
                     }
                 } else {
-                    $comment[$value['posts_id']]=[];
+                    $comment[$value['posts_id']] = [];
                 }
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
-            foreach ( $newPost as $key => $value){
-                array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+            foreach ( $comments as $key => $value){
+                $comments[$key]['comment'] = $comment[$value['posts_id']];
             }
             $comments = [];
-            foreach ( $newPost as $value){
+            foreach ( $comments as $value){
                 $value['comment'] = array_reverse($value['comment']);
                 array_push($comments, $value);
             }
