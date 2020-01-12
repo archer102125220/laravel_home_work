@@ -98,7 +98,7 @@ class PostController extends Controller
                 if(!in_array($value['posts_id'], $hasPost))array_push($hasPost, $value['posts_id']);
             }
             foreach ( $newPost as $key => $value){
-                array_push($newPost[$key]['comment'], $comment[$value['posts_id']]);
+                $newPost[$key]['comment'] = $comment[$value['posts_id']];
             }
             $posts = [];
             foreach ( $newPost as $value){
